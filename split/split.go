@@ -26,7 +26,7 @@ func mklogpath(f string) string {
 }
 
 func logpath(name, ext string, ti time.Time) string {
-	pa := ti.Format(time.RFC3339)
-	n := filepath.Join(name, name+"-"+pa[:7], name+"-"+pa[:10]+ext)
+	pa := ti.Format("20060102150405")
+	n := filepath.Join(name, name+"-"+pa[:6], name+"-"+pa+ext)
 	return n
 }
