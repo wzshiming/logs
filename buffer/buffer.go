@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/wzshiming/ffmt"
-	"github.com/wzshiming/tee/split"
 )
 
 type Buffer struct {
@@ -99,10 +98,10 @@ func (l *Buffer) Mklogs() error {
 	fs := make([]*bufio.Writer, 0, len(l.fn))
 	efs := make([]func() error, 0, len(l.fn))
 
-	// 移动老的日志
-	for _, v := range l.fn {
-		split.Mv(v)
-	}
+	//	// 移动老的日志
+	//	for _, v := range l.fn {
+	//		split.Mv(v)
+	//	}
 
 	// 创建新日志文件
 	for _, v := range l.fn {
