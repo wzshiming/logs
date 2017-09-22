@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/wzshiming/tee/buffer"
-	"github.com/wzshiming/tee/sign"
+	"github.com/wzshiming/mytee/buffer"
+	"github.com/wzshiming/mytee/sign"
 )
 
 func main() {
@@ -15,7 +15,7 @@ func main() {
 	u := flag.Bool("u", false, "Accept the signals (SIGUSR1) to regenerate the log file")
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage of %s:\n", os.Args[0])
-		fmt.Fprintf(os.Stderr, "      tee [-ai] [FILE]...")
+		fmt.Fprintf(os.Stderr, "      mytee [-ai] [FILE]...")
 		flag.PrintDefaults()
 	}
 	if *i {

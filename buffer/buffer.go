@@ -6,8 +6,6 @@ import (
 	"os"
 	"sync"
 	"time"
-
-	"github.com/wzshiming/ffmt"
 )
 
 type Buffer struct {
@@ -52,14 +50,12 @@ func (l *Buffer) Write(p []byte) (n int, err error) {
 	defer l.Unlock()
 	n, err = l.stdout.Write(p)
 	if err != nil {
-		ffmt.Mark(err)
-		return
+		return n, err
 	}
 	for _, v := range l.fileout {
 		n, err = v.Write(p)
 		if err != nil {
-			ffmt.Mark(err)
-			return
+			return n, err
 		}
 	}
 	l.On()
@@ -74,22 +70,16 @@ func (l *Buffer) Flush() (err error) {
 	}
 	err = l.stdout.Flush()
 	if err != nil {
-		ffmt.Mark(err)
+		return err
 		return
 	}
 	for _, v := range l.fileout {
 		err = v.Flush()
 		if err != nil {
-			ffmt.Mark(err)
-			return
+			return err
 		}
 	}
 	return
-}
-
-func (l *Buffer) Copy() error {
-	_, err := io.Copy(l, l.stdin)
-	return err
 }
 
 func (l *Buffer) Mklogs() error {
@@ -97,11 +87,6 @@ func (l *Buffer) Mklogs() error {
 	defer l.Unlock()
 	fs := make([]*bufio.Writer, 0, len(l.fn))
 	efs := make([]func() error, 0, len(l.fn))
-
-	//	// 移动老的日志
-	//	for _, v := range l.fn {
-	//		split.Mv(v)
-	//	}
 
 	// 创建新日志文件
 	for _, v := range l.fn {
@@ -128,6 +113,6 @@ func (l *Buffer) Mklogs() error {
 
 // 写入缓冲区
 func (l *Buffer) Run() error {
-	l.Copy()
-	return nil
+	_, err := io.Copy(l, l.stdin)
+	return err
 }
